@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from api.deps import AuthPendiente, DatosPreparando
 from api.routers import acopio, auth
@@ -50,3 +52,15 @@ def _core_error(request: Request, exc: CoreError):
 @app.get("/api/salud")
 def salud():
     return {"ok": True}
+
+
+_static = Path(__file__).resolve().parent.parent / "static"
+if _static.is_dir():
+    app.mount("/assets", StaticFiles(directory=_static / "assets"), name="assets")
+
+    @app.get("/{path:path}")
+    def spa(path: str):
+        archivo = _static / path
+        if archivo.is_file():
+            return FileResponse(archivo)
+        return FileResponse(_static / "index.html")
