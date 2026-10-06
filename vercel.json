@@ -2,7 +2,7 @@
   "buildCommand": "cd web && npm install && npm run build",
   "outputDirectory": "web/dist",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://TU-URL.onrender.com/api/$1" },
+    { "source": "/api/(.*)", "destination": "https://acopio-api-o9ne.onrender.com/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
